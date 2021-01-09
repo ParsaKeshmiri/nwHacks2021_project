@@ -1,11 +1,8 @@
 package com.kuzon_gaming;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class GUI implements ActionListener {
 
@@ -16,7 +13,11 @@ public class GUI implements ActionListener {
     JButton exit = new JButton("Exit");
 
     JLabel title = new JLabel();
+
     JTextPane instructions = new JTextPane();
+    JTextPane sex = new JTextPane();
+    JTextPane weight = new JTextPane();
+
     JFrame frame = new JFrame();
 
     public GUI() {
@@ -28,12 +29,32 @@ public class GUI implements ActionListener {
         title.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
 
         /* Instructions */
-        instructions.setText("Please Enter The Following");
+        Font font = new Font("Arial", Font.BOLD, 25);
+        //instructions.setContentType("Arial");
+        instructions.setText(("Tell us a bit about yourself"));
+        instructions.setFont(font);
+        instructions.setBackground(new Color(0x63c8ef));
+        instructions.setForeground((Color.WHITE));
+        instructions.setBounds(470, 133,613,61);
+
+        instructions.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                instructions.setEditable(true);
+                instructions.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                instructions.setEditable(false);
+                instructions.getCaret().setVisible(false);
+            }
+        });
 
 
 
         frame.setTitle("Quench Quest");
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -41,7 +62,8 @@ public class GUI implements ActionListener {
             }
         });
         frame.setSize(1280,720);
-        frame.setResizable(true);
+        frame.setResizable(false);
+        frame.add(instructions);
         frame.add(title);
         frame.setVisible(true);
 
