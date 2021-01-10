@@ -6,13 +6,19 @@ public class GameInstance {
     private int weightInPounds;
 
 
-    private int dailyIntakeOunces;
-    private int drinkingIntervalSeconds;
+
     private int level;
     private int sipsToNextLevel;
-    private long lastSip;
+    private int dailyIntakeOunces;
+
+    public int drinkingIntervalSeconds;
+    public long lastSip;
+
+    public int displayMinutes;
+    public int displaySeconds;
 
     GameInstance(boolean isMale, int weight) {
+        System.out.println("New game instance made");
         if (isMale) {
             sex = "Male";
         } else {
@@ -23,6 +29,15 @@ public class GameInstance {
         calculateDrinkingIntervals();
     }
 
+    public void running() {
+
+
+    }
+    
+    public void updateCountdown() {
+        displayMinutes = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) / 60;
+        displaySeconds = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) % 60;
+    }
 
     /**
      * Calculates recommended daily intake based on user's sex and weight
@@ -39,7 +54,7 @@ public class GameInstance {
      * Calculates time between sips
      */
     private void calculateDrinkingIntervals() {
-        drinkingIntervalSeconds = 24 * 16 / dailyIntakeOunces * 2;
+        drinkingIntervalSeconds = 24 * 16 / dailyIntakeOunces * 2 * 60;
     }
 
     /**

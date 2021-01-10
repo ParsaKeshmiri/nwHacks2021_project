@@ -4,6 +4,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GUI extends JFrame implements ActionListener, ChangeListener {
 
@@ -30,8 +33,6 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     private int weightInPounds;
 
     // Set up for second screen
-    private int initialTime;
-    private int currentTime;
     JTextPane reminder = new JTextPane();
 
     private GameInstance player;
@@ -312,8 +313,17 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             }
         });
 
-    }
+        while (System.currentTimeMillis() - player.lastSip < player.drinkingIntervalSeconds * 1000) {
+            player.updateCountdown();
+            System.out.println(player.displayMinutes + " " + player.displaySeconds);        // For testing
 
+
+            // TODO: Update countdown display
+
+
+        }
+
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
