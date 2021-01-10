@@ -7,6 +7,7 @@ public class GameInstance {
 
     public int totalSips;
     public int level;
+    public String title;
     private int sipsToNextLevel;
     private double dailyIntakeOunces;
 
@@ -22,6 +23,7 @@ public class GameInstance {
         totalSips = 0;
         level = 1;
         sipsToNextLevel = 2;
+        title = "Dehydrated Person";
         weightInPounds = weight;
         calculateIntake();
         calculateDrinkingIntervals();
@@ -33,7 +35,6 @@ public class GameInstance {
             sipsToNextLevel--;
         }
 
-        System.out.println("Total sips: " + totalSips);
         lastSip = System.currentTimeMillis();
 
         if (sipsToNextLevel <= 0) {
@@ -65,7 +66,45 @@ public class GameInstance {
     private void levelUp() {
         level++;
         sipsToNextLevel = level * 2;
-        System.out.println("Level up! You are now level " + level);
+
+        switch (level) {
+            case 1:
+                title = "Dehydrated Person";
+                break;
+            case 2:
+                title = "Water Drinking Novice";
+                break;
+            case 3:
+                title = "Hydrated Person";
+                break;
+            case 4:
+                title = "Advanced Water Drinker";
+                break;
+            case 5:
+                title = "Sipping Soldier";
+                break;
+            case 6:
+                title = "Sipping Champion";
+                break;
+            case 7:
+                title = "Sipping Grandmaster";
+                break;
+            case 8:
+                title = "Hydro Homie";
+                break;
+            case 9:
+                title = "Hydro Hero";
+                break;
+            case 10:
+                title = "Posideon's Offspring";
+                break;
+            case 11:
+                title = "Drinking Deity";
+                break;
+            default:
+                title = "Quenched";
+                break;
+        }
     }
 
 }

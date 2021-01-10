@@ -370,7 +370,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         sipCounter.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         sipCounter.setBackground(new Color(0x63c8ef));
         sipCounter.setForeground((Color.WHITE));
-        sipCounter.setBounds(1035, 10,187,42);
+        sipCounter.setBounds(10, 10,187,42);
 
         sipCounter.addFocusListener(new FocusListener() {
             @Override
@@ -386,11 +386,11 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             }
         });
 
-        levelDisplay.setText("Level " + player.level);
+        levelDisplay.setText("Level " + player.level + " - " + player.title);
         levelDisplay.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         levelDisplay.setBackground(new Color(0x63c8ef));
         levelDisplay.setForeground((Color.WHITE));
-        levelDisplay.setBounds(1035, 45,187,42);
+        levelDisplay.setBounds(10, 45, 445,42);
 
         levelDisplay.addFocusListener(new FocusListener() {
             @Override
