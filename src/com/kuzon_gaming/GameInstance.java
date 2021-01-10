@@ -7,8 +7,10 @@ public class GameInstance {
 
 
     private int dailyIntakeOunces;
+    private int drinkingIntervalSeconds;
     private int level;
     private int sipsToNextLevel;
+    private long lastSip;
 
     GameInstance(boolean isMale, int weight) {
         if (isMale) {
@@ -17,6 +19,8 @@ public class GameInstance {
             sex = "Female";
         }
         weightInPounds = weight;
+        calculateIntake();
+        calculateDrinkingIntervals();
     }
 
 
@@ -29,6 +33,13 @@ public class GameInstance {
         } else {
             dailyIntakeOunces = weightInPounds * 2 / 3 - 10;
         }
+    }
+
+    /**
+     * Calculates time between sips
+     */
+    private void calculateDrinkingIntervals() {
+        drinkingIntervalSeconds = 24 * 16 / dailyIntakeOunces * 2;
     }
 
     /**

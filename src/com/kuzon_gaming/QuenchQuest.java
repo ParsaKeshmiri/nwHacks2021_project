@@ -12,7 +12,7 @@ public class QuenchQuest {
 
 
     public static void main(String[] args) {
-        WelcomeGUI welcomeGui = new WelcomeGUI();
+        GUI gui = new GUI();
     }
 
     /**

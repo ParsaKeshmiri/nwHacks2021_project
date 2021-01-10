@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 
-public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener {
+public class GUI extends JFrame implements ActionListener, ChangeListener {
 
     ImageIcon logo = new ImageIcon("logo.png"); //application logo
 
@@ -15,7 +15,7 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
     JButton exit = new JButton("Exit");
     JTextPane instructions = new JTextPane();
 
-    // Set up
+    // Set up for initial screen
     private boolean isMale;
     private boolean isFemale;
     JTextPane sex = new JTextPane();
@@ -29,10 +29,15 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
     private boolean isButtonEnabled;
     private int weightInPounds;
 
+    // Set up for second screen
+    private int initialTime;
+    private int currentTime;
+    JTextPane reminder = new JTextPane();
+
     private GameInstance player;
 
 
-    public WelcomeGUI() {
+    public GUI() {
         /* Title */
         title.setText("Quench Quest");
         title.setVerticalAlignment(JLabel.TOP);
@@ -229,7 +234,8 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
                     System.out.println(weightInPounds);
                     player = new GameInstance(isMale, weightInPounds);
 
-                    GameGUI gamegui = new GameGUI();
+                    gameGUI();
+
                 }
             }
         });
@@ -248,6 +254,8 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
 
         frame.setSize(1280,720);
         frame.setResizable(false);
+
+        frame.add(reminder);
         frame.add(instructions);
         frame.add(sex);
         frame.add(weight);
@@ -263,6 +271,47 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
         ImageIcon logo = new ImageIcon("logo.png");
         frame.setIconImage(logo.getImage());
         frame.getContentPane().setBackground(new Color (0x63c8ef));
+    }
+
+    private void gameGUI() {
+        instructions.setVisible(false);
+        frame.remove(instructions);
+        sex.setVisible(false);
+        frame.remove(sex);
+        weight.setVisible(false);
+        frame.remove(weight);
+        male.setVisible(false);
+        frame.remove(male);
+        female.setVisible(false);
+        frame.remove(female);
+        weightIn.setVisible(false);
+        frame.remove(weightIn);
+        lbs.setVisible(false);
+        frame.remove(lbs);
+        submit.setVisible(false);
+        frame.remove(submit);
+
+
+        reminder.setText("Remember to drink water in...");
+        reminder.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+        reminder.setBackground(new Color(0x63c8ef));
+        reminder.setForeground((Color.WHITE));
+        reminder.setBounds(460, 133,613,40);
+
+        reminder.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                reminder.setEditable(true);
+                reminder.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                reminder.setEditable(false);
+                reminder.getCaret().setVisible(false);
+            }
+        });
+
     }
 
 
