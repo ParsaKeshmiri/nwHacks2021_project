@@ -3,13 +3,11 @@ package com.kuzon_gaming;
 public class GameInstance {
 
     private String sex;
-    private int weightInPounds;
-
-
+    private double weightInPounds;
 
     private int level;
     private int sipsToNextLevel;
-    private int dailyIntakeOunces;
+    private double dailyIntakeOunces;
 
     public int drinkingIntervalSeconds;
     public long lastSip;
@@ -18,7 +16,6 @@ public class GameInstance {
     public int displaySeconds;
 
     GameInstance(boolean isMale, int weight) {
-        System.out.println("New game instance made");
         if (isMale) {
             sex = "Male";
         } else {
@@ -33,7 +30,7 @@ public class GameInstance {
 
 
     }
-    
+
     public void updateCountdown() {
         displayMinutes = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) / 60;
         displaySeconds = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) % 60;
@@ -54,7 +51,7 @@ public class GameInstance {
      * Calculates time between sips
      */
     private void calculateDrinkingIntervals() {
-        drinkingIntervalSeconds = 24 * 16 / dailyIntakeOunces * 2 * 60;
+        drinkingIntervalSeconds = (int) (24 * 16 / dailyIntakeOunces * 2 * 60);
     }
 
     /**

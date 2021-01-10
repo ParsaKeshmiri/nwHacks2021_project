@@ -1,9 +1,13 @@
 package com.kuzon_gaming;
 
 import java.awt.event.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.TimerTask;
 
@@ -34,6 +38,17 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     // Set up for second screen
     JTextPane reminder = new JTextPane();
     JTextPane clock = new JTextPane();
+    JTextPane hoursDisplay = new JTextPane();
+    JTextPane minutesDisplay = new JTextPane();
+    JTextPane secondsDisplay = new JTextPane();
+
+
+    // Set up for third screen
+    JTextPane timeToDrink = new JTextPane();
+    JButton drankConfirmation = new JButton("I Drank");
+    ImageIcon glass = new ImageIcon("glass.png");
+    JLabel picture;
+
 
     private GameInstance player;
 
@@ -114,7 +129,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         });
 
         /* Weight Unit */
-        lbs.setText("lbs"); //make slider between kgs and lbs
+        lbs.setText("lbs");
         lbs.setFont(fontUserInfo);
         lbs.setBackground(new Color(0x63c8ef));
         lbs.setForeground((Color.WHITE));
@@ -232,8 +247,24 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
                         weightInPounds = Integer.valueOf(weightIn.getText());
                     } catch (NumberFormatException d) {
                     }
-                    System.out.println(weightInPounds);
                     player = new GameInstance(isMale, weightInPounds);
+
+                    instructions.setVisible(false);
+                    instructions.setEnabled(false);
+                    sex.setVisible(false);
+                    sex.setEnabled(false);
+                    weight.setVisible(false);
+                    weight.setEnabled(false);
+                    male.setVisible(false);
+                    male.setEnabled(false);
+                    female.setVisible(false);
+                    female.setEnabled(false);
+                    weightIn.setVisible(false);
+                    weightIn.setEnabled(false);
+                    lbs.setVisible(false);
+                    lbs.setEnabled(false);
+                    submit.setVisible(false);
+                    submit.setEnabled(false);
 
                     gameGUI();
 
@@ -256,8 +287,13 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.setSize(1280,720);
         frame.setResizable(false);
 
+        frame.add(drankConfirmation);
+        frame.add(timeToDrink);
         frame.add(reminder);
         frame.add(clock);
+        frame.add(hoursDisplay);
+        frame.add(minutesDisplay);
+        frame.add(secondsDisplay);
         frame.add(instructions);
         frame.add(sex);
         frame.add(weight);
@@ -273,6 +309,13 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         ImageIcon logo = new ImageIcon("logo.png");
         frame.setIconImage(logo.getImage());
         frame.getContentPane().setBackground(new Color (0x63c8ef));
+
+        ImageIcon img = new ImageIcon("glass.png");
+        picture = new JLabel(img, JLabel.CENTER);
+        frame.add(picture);
+
+        picture.setVisible(false);
+        picture.setEnabled(false);
     }
 
     int timeRemaining;
@@ -293,28 +336,27 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             minutes_string = String.format("%02d", minutes);
             hours_string = String.format("%02d", hours);
             clock.setText(hours_string+" : "+minutes_string+" : "+seconds_string);
+
+            if (seconds == 0 && minutes == 0 && hours == 0) {
+                timer.stop();
+                drinkGUI();
+            }
         }
 
     });
 
     private void gameGUI() {
-        instructions.setVisible(false);
-        frame.remove(instructions);
-        sex.setVisible(false);
-        frame.remove(sex);
-        weight.setVisible(false);
-        frame.remove(weight);
-        male.setVisible(false);
-        frame.remove(male);
-        female.setVisible(false);
-        frame.remove(female);
-        weightIn.setVisible(false);
-        frame.remove(weightIn);
-        lbs.setVisible(false);
-        frame.remove(lbs);
-        submit.setVisible(false);
-        frame.remove(submit);
 
+        hoursDisplay.setEnabled(true);
+        hoursDisplay.setVisible(true);
+        minutesDisplay.setEnabled(true);
+        minutesDisplay.setVisible(true);
+        secondsDisplay.setEnabled(true);
+        secondsDisplay.setVisible(true);
+        reminder.setEnabled(true);
+        reminder.setVisible(true);
+        clock.setEnabled(true);
+        clock.setVisible(true);
 
         reminder.setText("Remember to drink water in...");
         reminder.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
@@ -336,16 +378,85 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             }
         });
 
+        hoursDisplay.setText("Hours");
+        hoursDisplay.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
+        hoursDisplay.setBackground(new Color(0x63c8ef));
+        hoursDisplay.setForeground((Color.WHITE));
+        hoursDisplay.setBounds(352, 375, 100, 30);
+
+        hoursDisplay.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                hoursDisplay.setEditable(true);
+                hoursDisplay.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                hoursDisplay.setEditable(false);
+                hoursDisplay.getCaret().setVisible(false);
+            }
+        });
+
+        minutesDisplay.setText("Minutes");
+        minutesDisplay.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
+        minutesDisplay.setBackground(new Color(0x63c8ef));
+        minutesDisplay.setForeground((Color.WHITE));
+        minutesDisplay.setBounds(592, 375, 115, 30);
+
+        minutesDisplay.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                minutesDisplay.setEditable(true);
+                minutesDisplay.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                minutesDisplay.setEditable(false);
+                minutesDisplay.getCaret().setVisible(false);
+            }
+        });
+
+        secondsDisplay.setText("Seconds");
+        secondsDisplay.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
+        secondsDisplay.setBackground(new Color(0x63c8ef));
+        secondsDisplay.setForeground((Color.WHITE));
+        secondsDisplay.setBounds(838, 375, 115, 30);
+
+        secondsDisplay.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                secondsDisplay.setEditable(true);
+                secondsDisplay.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                secondsDisplay.setEditable(false);
+                secondsDisplay.getCaret().setVisible(false);
+            }
+        });
+
+        timeRemaining = player.drinkingIntervalSeconds;
+
+        hours = (timeRemaining/3600);
+        minutes = (timeRemaining/60) % 60;
+        seconds = (timeRemaining) % 60;
+        seconds_string = String.format("%02d", seconds);
+        minutes_string = String.format("%02d", minutes);
+        hours_string = String.format("%02d", hours);
         clock.setText(hours_string+" : "+minutes_string+" : "+seconds_string);
+
         clock.setFont(new Font("Comic Sans MS", Font.BOLD, 100));
         clock.setBackground(new Color(0x63c8ef));
         clock.setForeground((Color.WHITE));
-        clock.setBounds(330, 240,800,140);
+        clock.setBounds(330, 240,800,125);
 
         clock.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                clock.setEditable(true);
+                clock.setEditable(false);
                 clock.getCaret().setVisible(false);
             }
 
@@ -357,8 +468,80 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         });
 
         timer.start();
-        timeRemaining = player.drinkingIntervalSeconds;
-        System.out.println(player.drinkingIntervalSeconds);
+
+    }
+
+    private void drinkGUI() {
+        clock.setVisible(false);
+        clock.setEnabled(false);
+        reminder.setVisible(false);
+        reminder.setEnabled(false);
+        hoursDisplay.setVisible(false);
+        hoursDisplay.setEnabled(false);
+        minutesDisplay.setVisible(false);
+        minutesDisplay.setEnabled(false);
+        secondsDisplay.setVisible(false);
+        secondsDisplay.setEnabled(false);
+
+        timeToDrink.setEnabled(true);
+        timeToDrink.setVisible(true);
+        drankConfirmation.setEnabled(true);
+        drankConfirmation.setVisible(true);
+        picture.setVisible(true);
+        picture.setEnabled(true);
+
+        timeToDrink.setText("Time to Drink!");
+        timeToDrink.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
+        timeToDrink.setBackground(new Color(0x63c8ef));
+        timeToDrink.setForeground((Color.WHITE));
+        timeToDrink.setBounds(486, 510,400,60);
+
+        timeToDrink.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                timeToDrink.setEditable(false);
+                timeToDrink.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                timeToDrink.setEditable(false);
+                timeToDrink.getCaret().setVisible(false);
+            }
+        });
+
+        drankConfirmation.setBounds(576,593,120,45);
+        drankConfirmation.setFocusable(false);
+        drankConfirmation.setBackground(new Color(0x63c3e3));
+        drankConfirmation.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        drankConfirmation.setForeground(Color.white);
+        drankConfirmation.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        drankConfirmation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drankConfirmation.setVisible(false);
+                drankConfirmation.setEnabled(false);
+                timeToDrink.setVisible(false);
+                timeToDrink.setEnabled(false);
+                picture.setVisible(false);
+                picture.setEnabled(false);
+                reminder.setEnabled(true);
+                reminder.setVisible(true);
+                clock.setEnabled(true);
+                clock.setVisible(true);
+                hoursDisplay.setEnabled(true);
+                hoursDisplay.setVisible(true);
+                minutesDisplay.setEnabled(true);
+                minutesDisplay.setVisible(true);
+                secondsDisplay.setEnabled(true);
+                secondsDisplay.setVisible(true);
+                gameGUI();
+            }
+        });
+
+        /*setSize(400,400);
+        setLayout(new FlowLayout());*/
 
     }
 
