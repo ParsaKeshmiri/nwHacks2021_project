@@ -1,7 +1,5 @@
 package com.kuzon_gaming;
 
-import java.awt.GraphicsEnvironment;
-
 public class QuenchQuest {
 
     private String sex;
@@ -14,7 +12,7 @@ public class QuenchQuest {
 
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        WelcomeGUI welcomeGui = new WelcomeGUI();
     }
 
     /**

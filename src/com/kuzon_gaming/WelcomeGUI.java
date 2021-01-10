@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 
-public class GUI extends JFrame implements ActionListener, ChangeListener {
+public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener {
 
     ImageIcon logo = new ImageIcon("logo.png"); //application logo
 
@@ -27,9 +27,12 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     JButton submit = new JButton("Continue");
     private boolean isWeightEmpty;
     private boolean isButtonEnabled;
+    private int weightInPounds;
+
+    private GameInstance player;
 
 
-    public GUI() {
+    public WelcomeGUI() {
         /* Title */
         title.setText("Quench Quest");
         title.setVerticalAlignment(JLabel.TOP);
@@ -182,13 +185,28 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
                 if (weightIn.getText().equals("")) {
                     isWeightEmpty = true;
                     isButtonEnabled = false;
-                    System.out.println("wtf");
+
                 } else {
                     isWeightEmpty = false;
                     if (isMale || isFemale)
                         isButtonEnabled = true;
                     else isButtonEnabled = false;
                 }
+            }
+        });
+
+        /* Exit Button */
+        exit.setBounds(1116, 600, 83, 37);
+        exit.setFocusable(false);
+        exit.setBackground(new Color(0x63c3e3));
+        exit.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        exit.setForeground(Color.white);
+        exit.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 
@@ -204,7 +222,13 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isButtonEnabled) {
-                    System.out.println("wtf you actually did it");
+                    try {
+                        weightInPounds = Integer.valueOf(weightIn.getText());
+                    } catch (NumberFormatException d) {
+                    }
+                    System.out.println(weightInPounds);
+                    player = new GameInstance(isMale, weightInPounds);
+
                 }
             }
         });
@@ -213,7 +237,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         /* Frame */
         //TODO Add wave graphic to the bottom empty space
         frame.setTitle("Quench Quest");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -231,6 +255,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.add(weightIn);
         frame.add(lbs);
         frame.add(submit);
+        frame.add(exit);
         frame.add(title);
         frame.setVisible(true);
 
