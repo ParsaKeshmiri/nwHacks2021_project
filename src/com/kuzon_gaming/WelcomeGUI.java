@@ -229,6 +229,7 @@ public class WelcomeGUI extends JFrame implements ActionListener, ChangeListener
                     System.out.println(weightInPounds);
                     player = new GameInstance(isMale, weightInPounds);
 
+                    GameGUI gamegui = new GameGUI();
                 }
             }
         });
