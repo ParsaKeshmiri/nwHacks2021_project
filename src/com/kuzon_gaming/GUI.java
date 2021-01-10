@@ -7,12 +7,6 @@ import java.awt.*;
 
 public class GUI extends JFrame implements ActionListener, ChangeListener {
 
-    /*
-    private int WEIGHT_MIN = 100;
-    private int WEIGHT_MAX = 250;
-    private int WEIGHT_INITIAL = 175;
-    */
-
     ImageIcon logo = new ImageIcon("logo.png"); //application logo
 
     JFrame frame = new JFrame();
@@ -22,13 +16,17 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     JTextPane instructions = new JTextPane();
 
     // Set up
+    private boolean isMale;
+    private boolean isFemale;
     JTextPane sex = new JTextPane();
-    JButton male = new JButton("Male");
-    JButton female = new JButton("Female");
+    JToggleButton male = new JToggleButton("Male");
+    JToggleButton female = new JToggleButton("Female");
     JTextPane weight = new JTextPane();
     JTextField weightIn = new JTextField();
     JTextPane lbs = new JTextPane();
-    JButton submit = new JButton();
+    JButton submit = new JButton("Continue");
+    private boolean isWeightEmpty;
+    private boolean isButtonEnabled;
 
 
     public GUI() {
@@ -41,12 +39,12 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
 
         /* Instructions */
-        Font fontInstructions = new Font("Arial", Font.BOLD, 25);
+        Font fontInstructions = new Font("Comic Sans MS", Font.BOLD, 25);
         instructions.setText("Tell us a bit about yourself");
         instructions.setFont(fontInstructions);
         instructions.setBackground(new Color(0x63c8ef));
         instructions.setForeground((Color.WHITE));
-        instructions.setBounds(470, 133,613,30);
+        instructions.setBounds(470, 133,613,40);
 
         instructions.addFocusListener(new FocusListener() {
             @Override
@@ -62,7 +60,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             }
         });
 
-        Font fontUserInfo = new Font("Arial", Font.BOLD, 18);
+        Font fontUserInfo = new Font("Comic Sans MS", Font.BOLD, 18);
 
         /* Sex Input */
         sex.setText("Sex: ");
@@ -90,7 +88,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         weight.setFont(fontUserInfo);
         weight.setBackground(new Color(0x63c8ef));
         weight.setForeground((Color.WHITE));
-        weight.setBounds(492, 290, 69, 32);
+        weight.setBounds(492, 290, 73, 32);
 
         weight.addFocusListener(new FocusListener() {
             @Override
@@ -130,33 +128,90 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         /* Sex Buttons */
         male.setBounds(580,227,83,37);
         male.setFocusable(false);
+        male.setBackground(new Color(0x63c3e3));
+        male.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        male.setForeground(Color.white);
+        male.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        male.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    isMale = true;
+                    isFemale = false;
+                }
+        });
+
 
 
         female.setBounds(670,227,83,37);
         female.setFocusable(false);
+        female.setBackground(new Color(0x63c3e3));
+        female.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        female.setForeground(Color.white);
+        female.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        female.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isFemale = true;
+                isMale = false;
+            }
+        });
 
 
         /* Weight Text Field */
         weightIn.setBounds(580, 288, 83, 37);
         weightIn.setHorizontalAlignment(SwingConstants.RIGHT);
-        Font weightInFont = new Font("Arial", Font.PLAIN, 20);
+        Font weightInFont = new Font("Comic Sans MS", Font.PLAIN, 20);
         weightIn.setFont(weightInFont);
 
-       /* *//* Weight Slider *//*
-        JPanel weightPanel = new JPanel();
-        JSlider weightSlider = new JSlider(WEIGHT_MIN, WEIGHT_MAX, WEIGHT_INITIAL);
-        weightSlider.setPaintTrack(true);
-        weightSlider.setPaintTicks(true);
-        weightSlider.setPaintLabels(true);
-        weightSlider.setMajorTickSpacing(50);
-        weightSlider.setMinorTickSpacing(5);
-        weightSlider.setLabelTable();
-        weightSlider.addChangeListener(this);
-        weightSlider.setOrientation(SwingConstants.VERTICAL);
-       */
+        /* Verify Weight Meets Conditions */
+        weightIn.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void changed() {
+                if (weightIn.getText().equals("")) {
+                    isWeightEmpty = true;
+                    isButtonEnabled = false;
+                    System.out.println("wtf");
+                } else {
+                    isWeightEmpty = false;
+                    if (isMale || isFemale)
+                        isButtonEnabled = true;
+                    else isButtonEnabled = false;
+                }
+            }
+        });
+
+        /* Submit Button */
+        submit.setBounds(574, 380, 95, 37);
+        submit.setFocusable(false);
+        submit.setBackground(new Color(0x63c3e3));
+        submit.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        submit.setForeground(Color.white);
+        submit.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isButtonEnabled) {
+                    System.out.println("wtf you actually did it");
+                }
+            }
+        });
 
 
         /* Frame */
+        //TODO Add wave graphic to the bottom empty space
         frame.setTitle("Quench Quest");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -175,6 +230,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.add(female);
         frame.add(weightIn);
         frame.add(lbs);
+        frame.add(submit);
         frame.add(title);
         frame.setVisible(true);
 
