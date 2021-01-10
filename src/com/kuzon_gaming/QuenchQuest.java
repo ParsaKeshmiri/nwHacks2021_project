@@ -1,5 +1,7 @@
 package com.kuzon_gaming;
 
+import java.awt.GraphicsEnvironment;
+
 public class QuenchQuest {
 
     private String sex;
@@ -10,10 +12,10 @@ public class QuenchQuest {
     private int level;
     private int sipsToNextLevel;
 
+
     public static void main(String[] args) {
         GUI gui = new GUI();
     }
-
 
     /**
      * Calculates recommended daily intake based on user's sex and weight
@@ -25,5 +27,13 @@ public class QuenchQuest {
             dailyIntakeOunces = weightInPounds * 2 / 3 - 10;
         }
     }
-    
+
+    /**
+     * Updates user's level and level progression
+     */
+    private void levelUp() {
+        level++;
+        sipsToNextLevel = level * 2;
+    }
+
 }

@@ -2,23 +2,34 @@ package com.kuzon_gaming;
 
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 
-public class GUI implements ActionListener {
+public class GUI extends JFrame implements ActionListener, ChangeListener {
+
+    /*
+    private int WEIGHT_MIN = 100;
+    private int WEIGHT_MAX = 250;
+    private int WEIGHT_INITIAL = 175;
+    */
 
     ImageIcon logo = new ImageIcon("logo.png"); //application logo
 
-    JButton male = new JButton("Male");
-    JButton female = new JButton("Female");
-    JButton exit = new JButton("Exit");
+    JFrame frame = new JFrame();
 
     JLabel title = new JLabel();
-
+    JButton exit = new JButton("Exit");
     JTextPane instructions = new JTextPane();
-    JTextPane sex = new JTextPane();
-    JTextPane weight = new JTextPane();
 
-    JFrame frame = new JFrame();
+    // Set up
+    JTextPane sex = new JTextPane();
+    JButton male = new JButton("Male");
+    JButton female = new JButton("Female");
+    JTextPane weight = new JTextPane();
+    JTextField weightIn = new JTextField();
+    JTextPane lbs = new JTextPane();
+    JButton submit = new JButton();
+
 
     public GUI() {
         /* Title */
@@ -58,7 +69,7 @@ public class GUI implements ActionListener {
         sex.setFont(fontUserInfo);
         sex.setBackground(new Color(0x63c8ef));
         sex.setForeground((Color.WHITE));
-        sex.setBounds(519, 230, 105,32);
+        sex.setBounds(519, 230, 42,32);
 
         sex.addFocusListener(new FocusListener() {
             @Override
@@ -79,7 +90,7 @@ public class GUI implements ActionListener {
         weight.setFont(fontUserInfo);
         weight.setBackground(new Color(0x63c8ef));
         weight.setForeground((Color.WHITE));
-        weight.setBounds(492, 290, 105, 32);
+        weight.setBounds(492, 290, 69, 32);
 
         weight.addFocusListener(new FocusListener() {
             @Override
@@ -95,8 +106,57 @@ public class GUI implements ActionListener {
             }
         });
 
+        /* Weight Unit */
+        lbs.setText("lbs"); //make slider between kgs and lbs
+        lbs.setFont(fontUserInfo);
+        lbs.setBackground(new Color(0x63c8ef));
+        lbs.setForeground((Color.WHITE));
+        lbs.setBounds(670, 290, 69, 32);
+
+        lbs.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                lbs.setEditable(true);
+                lbs.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                lbs.setEditable(false);
+                lbs.getCaret().setVisible(false);
+            }
+        });
+
+        /* Sex Buttons */
+        male.setBounds(580,227,83,37);
+        male.setFocusable(false);
 
 
+        female.setBounds(670,227,83,37);
+        female.setFocusable(false);
+
+
+        /* Weight Text Field */
+        weightIn.setBounds(580, 288, 83, 37);
+        weightIn.setHorizontalAlignment(SwingConstants.RIGHT);
+        Font weightInFont = new Font("Arial", Font.PLAIN, 20);
+        weightIn.setFont(weightInFont);
+
+       /* *//* Weight Slider *//*
+        JPanel weightPanel = new JPanel();
+        JSlider weightSlider = new JSlider(WEIGHT_MIN, WEIGHT_MAX, WEIGHT_INITIAL);
+        weightSlider.setPaintTrack(true);
+        weightSlider.setPaintTicks(true);
+        weightSlider.setPaintLabels(true);
+        weightSlider.setMajorTickSpacing(50);
+        weightSlider.setMinorTickSpacing(5);
+        weightSlider.setLabelTable();
+        weightSlider.addChangeListener(this);
+        weightSlider.setOrientation(SwingConstants.VERTICAL);
+       */
+
+
+        /* Frame */
         frame.setTitle("Quench Quest");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -105,11 +165,16 @@ public class GUI implements ActionListener {
                 frame.setExtendedState(JFrame.ICONIFIED);
             }
         });
+
         frame.setSize(1280,720);
         frame.setResizable(false);
         frame.add(instructions);
         frame.add(sex);
         frame.add(weight);
+        frame.add(male);
+        frame.add(female);
+        frame.add(weightIn);
+        frame.add(lbs);
         frame.add(title);
         frame.setVisible(true);
 
@@ -121,6 +186,11 @@ public class GUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
 
     }
 }
