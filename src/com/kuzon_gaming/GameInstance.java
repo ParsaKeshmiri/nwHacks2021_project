@@ -5,15 +5,13 @@ public class GameInstance {
     private String sex;
     private double weightInPounds;
 
-    private int level;
+    public int totalSips;
+    public int level;
     private int sipsToNextLevel;
     private double dailyIntakeOunces;
 
     public int drinkingIntervalSeconds;
-    public long lastSip;
-
-    public int displayMinutes;
-    public int displaySeconds;
+    public long lastSip = System.currentTimeMillis();
 
     GameInstance(boolean isMale, int weight) {
         if (isMale) {
@@ -21,19 +19,26 @@ public class GameInstance {
         } else {
             sex = "Female";
         }
+        totalSips = 0;
+        level = 1;
+        sipsToNextLevel = 2;
         weightInPounds = weight;
         calculateIntake();
         calculateDrinkingIntervals();
     }
 
-    public void running() {
+    public void sipWater() {
+        if (System.currentTimeMillis() - lastSip > drinkingIntervalSeconds * 1000) {
+            totalSips++;
+            sipsToNextLevel--;
+        }
 
+        System.out.println("Total sips: " + totalSips);
+        lastSip = System.currentTimeMillis();
 
-    }
-
-    public void updateCountdown() {
-        displayMinutes = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) / 60;
-        displaySeconds = (int) ((lastSip + drinkingIntervalSeconds * 1000 - System.currentTimeMillis()) / 1000) % 60;
+        if (sipsToNextLevel <= 0) {
+            levelUp();
+        }
     }
 
     /**
@@ -60,6 +65,7 @@ public class GameInstance {
     private void levelUp() {
         level++;
         sipsToNextLevel = level * 2;
+        System.out.println("Level up! You are now level " + level);
     }
 
 }

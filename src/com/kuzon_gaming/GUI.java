@@ -19,9 +19,11 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
     JLabel title = new JLabel();
     JButton exit = new JButton("Exit");
-    JTextPane instructions = new JTextPane();
+    JTextPane sipCounter = new JTextPane();
+    JTextPane levelDisplay = new JTextPane();
 
     // Set up for initial screen
+    JTextPane instructions = new JTextPane();
     private boolean isMale;
     private boolean isFemale;
     JTextPane sex = new JTextPane();
@@ -287,6 +289,8 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.setSize(1280,720);
         frame.setResizable(false);
 
+        frame.add(sipCounter);
+        frame.add(levelDisplay);
         frame.add(drankConfirmation);
         frame.add(timeToDrink);
         frame.add(reminder);
@@ -306,11 +310,11 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.add(title);
         frame.setVisible(true);
 
-        ImageIcon logo = new ImageIcon("logo.png");
+        ImageIcon logo = new ImageIcon("C:\\Users\\parsa\\IdeaProjects\\nwHacks2021\\src\\logo.png");
         frame.setIconImage(logo.getImage());
         frame.getContentPane().setBackground(new Color (0x63c8ef));
 
-        ImageIcon img = new ImageIcon("glass.png");
+        ImageIcon img = new ImageIcon("C:\\Users\\parsa\\IdeaProjects\\nwHacks2021\\src\\glass.png");
         picture = new JLabel(img, JLabel.CENTER);
         frame.add(picture);
 
@@ -357,6 +361,50 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         reminder.setVisible(true);
         clock.setEnabled(true);
         clock.setVisible(true);
+        sipCounter.setEnabled(true);
+        sipCounter.setVisible(true);
+        levelDisplay.setEnabled(true);
+        levelDisplay.setVisible(true);
+
+        sipCounter.setText("Total sips: " + player.totalSips);
+        sipCounter.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+        sipCounter.setBackground(new Color(0x63c8ef));
+        sipCounter.setForeground((Color.WHITE));
+        sipCounter.setBounds(1035, 10,187,42);
+
+        sipCounter.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                sipCounter.setEditable(true);
+                sipCounter.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                sipCounter.setEditable(false);
+                sipCounter.getCaret().setVisible(false);
+            }
+        });
+
+        levelDisplay.setText("Level " + player.level);
+        levelDisplay.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+        levelDisplay.setBackground(new Color(0x63c8ef));
+        levelDisplay.setForeground((Color.WHITE));
+        levelDisplay.setBounds(1035, 45,187,42);
+
+        levelDisplay.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                levelDisplay.setEditable(true);
+                levelDisplay.getCaret().setVisible(false);
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                levelDisplay.setEditable(false);
+                levelDisplay.getCaret().setVisible(false);
+            }
+        });
 
         reminder.setText("Remember to drink water in...");
         reminder.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
@@ -536,6 +584,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
                 minutesDisplay.setVisible(true);
                 secondsDisplay.setEnabled(true);
                 secondsDisplay.setVisible(true);
+                player.sipWater();
                 gameGUI();
             }
         });
