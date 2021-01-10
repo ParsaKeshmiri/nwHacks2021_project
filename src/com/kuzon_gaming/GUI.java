@@ -275,8 +275,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.getContentPane().setBackground(new Color (0x63c8ef));
     }
 
-
-    int timeRemaining = player.drinkingIntervalSeconds;   // Initialized for testing
+    int timeRemaining;
     int seconds;
     int minutes;
     int hours;
@@ -286,10 +285,10 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
     Timer timer = new Timer(1000, new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            timeRemaining -= 1000;
-            hours = (timeRemaining/3600000);
-            minutes = (timeRemaining/60000) % 60;
-            seconds = (timeRemaining/1000) % 60;
+            timeRemaining -= 1;
+            hours = (timeRemaining/3600);
+            minutes = (timeRemaining/60) % 60;
+            seconds = (timeRemaining) % 60;
             seconds_string = String.format("%02d", seconds);
             minutes_string = String.format("%02d", minutes);
             hours_string = String.format("%02d", hours);
@@ -358,6 +357,8 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         });
 
         timer.start();
+        timeRemaining = player.drinkingIntervalSeconds;
+        System.out.println(player.drinkingIntervalSeconds);
 
     }
 
