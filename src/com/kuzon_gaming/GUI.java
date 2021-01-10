@@ -5,7 +5,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.util.Date;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class GUI extends JFrame implements ActionListener, ChangeListener {
@@ -34,6 +33,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
 
     // Set up for second screen
     JTextPane reminder = new JTextPane();
+    JTextPane clock = new JTextPane();
 
     private GameInstance player;
 
@@ -145,9 +145,9 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         male.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    isMale = true;
-                    isFemale = false;
-                }
+                isMale = true;
+                isFemale = false;
+            }
         });
 
 
@@ -257,6 +257,7 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.setResizable(false);
 
         frame.add(reminder);
+        frame.add(clock);
         frame.add(instructions);
         frame.add(sex);
         frame.add(weight);
@@ -273,6 +274,29 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
         frame.setIconImage(logo.getImage());
         frame.getContentPane().setBackground(new Color (0x63c8ef));
     }
+
+
+    int timeRemaining = player.drinkingIntervalSeconds;   // Initialized for testing
+    int seconds;
+    int minutes;
+    int hours;
+    String seconds_string = String.format("%02d", seconds);
+    String minutes_string = String.format("%02d", minutes);
+    String hours_string = String.format("%02d", hours);
+    Timer timer = new Timer(1000, new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            timeRemaining -= 1000;
+            hours = (timeRemaining/3600000);
+            minutes = (timeRemaining/60000) % 60;
+            seconds = (timeRemaining/1000) % 60;
+            seconds_string = String.format("%02d", seconds);
+            minutes_string = String.format("%02d", minutes);
+            hours_string = String.format("%02d", hours);
+            clock.setText(hours_string+" : "+minutes_string+" : "+seconds_string);
+        }
+
+    });
 
     private void gameGUI() {
         instructions.setVisible(false);
@@ -313,15 +337,27 @@ public class GUI extends JFrame implements ActionListener, ChangeListener {
             }
         });
 
-        while (System.currentTimeMillis() - player.lastSip < player.drinkingIntervalSeconds * 1000) {
-            player.updateCountdown();
-            System.out.println(player.displayMinutes + " " + player.displaySeconds);        // For testing
+        clock.setText(hours_string+" : "+minutes_string+" : "+seconds_string);
+        clock.setFont(new Font("Comic Sans MS", Font.BOLD, 100));
+        clock.setBackground(new Color(0x63c8ef));
+        clock.setForeground((Color.WHITE));
+        clock.setBounds(330, 240,800,140);
 
+        clock.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                clock.setEditable(true);
+                clock.getCaret().setVisible(false);
+            }
 
-            // TODO: Update countdown display
+            @Override
+            public void focusGained(FocusEvent e) {
+                clock.setEditable(false);
+                clock.getCaret().setVisible(false);
+            }
+        });
 
-
-        }
+        timer.start();
 
     }
 
